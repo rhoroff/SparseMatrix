@@ -20,6 +20,9 @@ public class MatrixNode {
     public int getCol(){
         return this.col;
     }
+    public MatrixNode next(){
+        return this.next;
+    }
     public void setNext(MatrixNode nextNode){
         this.next = nextNode;
     }
