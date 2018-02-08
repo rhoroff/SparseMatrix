@@ -111,7 +111,15 @@ public class SparseMatrix implements SparseInterface {
     }
 
     public String toString() {
-        
+        MatrixNode curNode = this.head;
+        StringBuilder matrix = new StringBuilder();
+        while(curNode.next() != null){
+            matrix.append(curNode.getRow() + curNode.getCol() + curNode.getEntryValue() +"\n");
+            curNode = curNode.next();
+            if (curNode.next() == null){
+                matrix.append(curNode.getRow() + curNode.getCol() + curNode.getEntryValue() +"\n");
+            }
+        }
     }
     public int getSize(){/*Returns the amount of rows and columns in the matrix*/
         return this.size;
