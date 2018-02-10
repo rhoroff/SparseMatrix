@@ -41,7 +41,7 @@ public class SparseMatrix implements SparseInterface {
             MatrixNode newNode = new MatrixNode(row, column, data);/*Initialize new node with correct position and values*/
             MatrixNode curNode = this.head;/*Set the curNode to the head so as to compare newNode with the next value in the list*/
             if(curNode.next() == null){/*If the curNode is the tail of the matrix*/
-                if(row < curNode.getRow() || (newNode.getRow() == curNode.getRow() && column < curNode.getCol())){
+                if(row < curNode.getRow() || (newNode.getRow() == curNode.getRow()) && (column < curNode.getCol())){
                     newNode.setNext(curNode);
                     this.head = newNode;
                 }
@@ -56,7 +56,7 @@ public class SparseMatrix implements SparseInterface {
                     curNode.setNext(newNode);/*Set the curNode's next to newNode*/
                     return;
                 }
-                if(row == curNode.next().getRow() && column ==  curNode.next().getCol()){/*If data is being overwritten*/
+                if (row == curNode.next().getRow() && column == curNode.next().getCol()) {/*If data is being overwritten*/
                     newNode.setNext(curNode.next().next());
                     curNode.setNext(newNode);
                     return;
@@ -68,29 +68,31 @@ public class SparseMatrix implements SparseInterface {
                         return;
                     }
                     if (column > curNode.next().getCol()) {/*If newNode is farther the right in the same row as cureNode.next()*/
-                        if(curNode.next() == this.tail)/*If the next node is the current tail*/
-                            this.tail= newNode;
-                        curNode.next().setNext(newNode);/*We don't have to set newNode's next to anything because it is the last element in the matrix*/
-
-                        newNode.setNext(curNode.next().next());/*Set newNode's next to the node after the curNode's next*/
-                        curNode.next().setNext(newNode);/*Set curNode's next.next() to new Node*/
-                        return;
-
+                        if(curNode.next().next() == null) {
+                            curNode.next().setNext(newNode);
+                            return;
+                        }else if (curNode.next().next().getCol() < column) {
+                            curNode = curNode.next();
+                            continue;
+                        }else{
+                            newNode.setNext(curNode.next().next());
+                            curNode.next().setNext(newNode);
+                            return;
+                        }
                     }
                 }
-                curNode = curNode.next();/*Loop continuation*/
-                if(curNode.next() == null){/*If the curNode is the tail of the matrix*/
-                    if(row < curNode.getRow() || (newNode.getRow() == curNode.getRow() && column < curNode.getCol())){
-                        newNode.setNext(curNode);
-                        this.head = newNode;
+                if(curNode.next().next() == null){/*If the curNode is the tail of the matrix*/
+                    if(row < curNode.next().getRow() || (newNode.getRow() == curNode.next().getRow()) && (column < curNode.next().getCol())){
+                        newNode.setNext(curNode.next());
+                        curNode.setNext(newNode);
                     }
                     else{
-                        curNode.setNext(newNode);
+                        curNode.next().setNext(newNode);
                     }
                     return;
                 }
+                curNode = curNode.next();
             }
-
         }
     }
     public void removeElement(int row, int column){
@@ -101,6 +103,7 @@ public class SparseMatrix implements SparseInterface {
         if(row == this.head.getRow() && column == this.head.getCol()){/*If the element being removed is the first element in the matrix*/
             if(this.head.next() == null){
                 this.head = null;
+                return;
             }else
                 this.head = this.head.next();/*set the head to the next of the head*/
             return;
@@ -112,9 +115,10 @@ public class SparseMatrix implements SparseInterface {
                         return;
                     }else{
                         curNode.setNext(curNode.next().next());/*Remove the designated element from the list*/
+                        return;
                     }
-                    curNode = curNode.next();
                 }
+                curNode = curNode.next();
             }
         }
     }
@@ -148,7 +152,7 @@ public class SparseMatrix implements SparseInterface {
                 }
             }
         }
-        return 912;
+        return 0;
     }
     public int determinant(){
         return 2;
