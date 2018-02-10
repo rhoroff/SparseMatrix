@@ -1,3 +1,4 @@
+package com.company;
 public class MatrixNode {
     private int row;
     private int col;
