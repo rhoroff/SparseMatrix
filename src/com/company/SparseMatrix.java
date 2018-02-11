@@ -158,7 +158,37 @@ public class SparseMatrix implements SparseInterface {
         return 2;
     }
     public SparseInterface minor(int row, int col) {
-        return null;
+        SparseInterface minor = new SparseMatrix();
+        minor.setSize(this.getSize()-1);
+        MatrixNode curNode = this.head;
+        while(curNode != null){
+            if(curNode.getRow() != row && curNode.getCol() != col){
+                if(row > curNode.getRow() && col > curNode.getCol()){/*Case that the minor is taken both in a higher row and column*/
+                    minor.addElement(curNode.getRow(), curNode.getCol(), curNode.getEntryValue());
+                    curNode = curNode.next();
+                    continue;
+                }
+                if (row > curNode.getRow() && col < curNode.getCol()){
+                    minor.addElement(curNode.getRow(), curNode.getCol() - 1, curNode.getEntryValue());/*Case that minor is taken in a higher row but a preceeding column*/
+                    curNode = curNode.next();
+                    continue;
+                }
+                if( row < curNode.getRow() && col > curNode.getCol()){/*Case that the minor is taken in a lower row and a preceeding column*/
+                    minor.addElement(curNode.getRow() - 1, curNode.getCol(), curNode.getEntryValue());
+                    curNode = curNode.next();
+                    continue;
+                }
+                if(row < curNode.getRow() && col < curNode.getCol()){
+                    minor.addElement(curNode.getRow() - 1, curNode.getCol() -1 , curNode.getEntryValue());
+                    curNode = curNode.next();
+                    continue;
+                }
+            }
+            curNode = curNode.next();
+
+
+        }
+        return minor;
     }
 
     public String toString() {
