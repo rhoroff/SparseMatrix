@@ -155,10 +155,45 @@ public class SparseMatrix implements SparseInterface {
         return 0;
     }
     public int determinant(){
-        return 2;
+        if (this.getSize() ==2){/*Base Case*/
+
+        }else{/*Recursive case*/
+
+        }
+        return 0;
     }
     public SparseInterface minor(int row, int col) {
-        return null;
+        SparseInterface minor = new SparseMatrix();
+        minor.setSize(this.getSize()-1);
+        MatrixNode curNode = this.head;
+        while(curNode != null){
+            if(curNode.getRow() != row && curNode.getCol() != col){
+                if(row > curNode.getRow() && col > curNode.getCol()){/*Case that the minor is taken both in a higher row and column*/
+                    minor.addElement(curNode.getRow(), curNode.getCol(), curNode.getEntryValue());
+                    curNode = curNode.next();
+                    continue;
+                }
+                if (row > curNode.getRow() && col < curNode.getCol()){
+                    minor.addElement(curNode.getRow(), curNode.getCol() - 1, curNode.getEntryValue());/*Case that minor is taken in a higher row but a preceeding column*/
+                    curNode = curNode.next();
+                    continue;
+                }
+                if( row < curNode.getRow() && col > curNode.getCol()){/*Case that the minor is taken in a lower row and a preceeding column*/
+                    minor.addElement(curNode.getRow() - 1, curNode.getCol(), curNode.getEntryValue());
+                    curNode = curNode.next();
+                    continue;
+                }
+                if(row < curNode.getRow() && col < curNode.getCol()){
+                    minor.addElement(curNode.getRow() - 1, curNode.getCol() -1 , curNode.getEntryValue());
+                    curNode = curNode.next();
+                    continue;
+                }
+            }
+            curNode = curNode.next();
+
+
+        }
+        return minor;
     }
 
     public String toString() {
@@ -167,12 +202,10 @@ public class SparseMatrix implements SparseInterface {
             return ("");
         }
         StringBuilder matrix = new StringBuilder();
-        while(curNode.next() != null){
+        while(curNode != null){
             matrix.append(Integer.toString(curNode.getRow()) + " "  +Integer.toString(curNode.getCol()) + " " + Integer.toString(curNode.getEntryValue()) +"\n");
             curNode = curNode.next();
-            if (curNode.next() == null){
-                matrix.append(Integer.toString(curNode.getRow()) + " "  +Integer.toString(curNode.getCol()) + " " + Integer.toString(curNode.getEntryValue()) +"\n");
-            }
+
         }
         return matrix.toString();
     }
