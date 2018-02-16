@@ -1,5 +1,4 @@
 package com.company;
-
 public class SparseMatrix implements SparseInterface {
     private MatrixNode head;
     private MatrixNode tail;
@@ -155,15 +154,29 @@ public class SparseMatrix implements SparseInterface {
         return 0;
     }
     public int determinant(){
-        if (this.getSize() ==2){/*Base Case*/
-
-        }else{/*Recursive case*/
-
+        int determinant = 0;
+        SparseMatrix detMatrix = this;
+        if(this.head == null){
+            return 0;
         }
-        return 0;
+        if (detMatrix.getSize() ==2){/*Base Case*/
+            MatrixNode curNode = this.head;
+            return (this.getElement(0,0) * this.getElement(1,1)) - (this.getElement(1,0) * this.getElement(0,1));
+            /* return ad - bc*/
+        }else{/*Recursive case*/
+            MatrixNode curNode = detMatrix.head;
+            if (curNode.getRow()!= 0){/*The first row of the matrix is empty, then the determinant is zero*/
+                return 0;
+            }
+            while(curNode.getRow() == 0 && curNode!= null){
+                determinant += (curNode.getEntryValue() * Math.pow(-1,curNode.getRow() + curNode.getCol()) * detMatrix.minor(curNode.getRow(), curNode.getCol()).determinant());
+                curNode = curNode.next();
+            }
+        }
+        return determinant;
     }
-    public SparseInterface minor(int row, int col) {
-        SparseInterface minor = new SparseMatrix();
+    public SparseMatrix minor(int row, int col) {
+        SparseMatrix minor = new SparseMatrix();
         minor.setSize(this.getSize()-1);
         MatrixNode curNode = this.head;
         while(curNode != null){
@@ -195,6 +208,7 @@ public class SparseMatrix implements SparseInterface {
         }
         return minor;
     }
+
 
     public String toString() {
         MatrixNode curNode = this.head;
