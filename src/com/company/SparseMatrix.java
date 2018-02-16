@@ -155,7 +155,12 @@ public class SparseMatrix implements SparseInterface {
         return 0;
     }
     public int determinant(){
-        return 2;
+        if (this.getSize() ==2){/*Base Case*/
+
+        }else{/*Recursive case*/
+
+        }
+        return 0;
     }
     public SparseInterface minor(int row, int col) {
         SparseInterface minor = new SparseMatrix();
@@ -197,12 +202,10 @@ public class SparseMatrix implements SparseInterface {
             return ("");
         }
         StringBuilder matrix = new StringBuilder();
-        while(curNode.next() != null){
+        while(curNode != null){
             matrix.append(Integer.toString(curNode.getRow()) + " "  +Integer.toString(curNode.getCol()) + " " + Integer.toString(curNode.getEntryValue()) +"\n");
             curNode = curNode.next();
-            if (curNode.next() == null){
-                matrix.append(Integer.toString(curNode.getRow()) + " "  +Integer.toString(curNode.getCol()) + " " + Integer.toString(curNode.getEntryValue()) +"\n");
-            }
+
         }
         return matrix.toString();
     }
