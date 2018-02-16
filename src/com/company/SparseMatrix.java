@@ -1,5 +1,5 @@
 package com.company;
-
+import java.math.*;
 public class SparseMatrix implements SparseInterface {
     private MatrixNode head;
     private MatrixNode tail;
@@ -155,12 +155,25 @@ public class SparseMatrix implements SparseInterface {
         return 0;
     }
     public int determinant(){
-        if (this.getSize() ==2){/*Base Case*/
-
+        int determinant = 0;
+        SparseInterface detMatrix = this;
+        if (detMatrix.getSize() ==2){/*Base Case*/
+            MatrixNode curNode = this.head;
+            return (this.getElement(0,0) * this.getElement(1,0)) - (this.getElement(1,0) * this.getElement(0,1));
+            /* return ad - bc*/
         }else{/*Recursive case*/
-
+            MatrixNode curNode = this.head;
+            if (this.head.getRow()!= 0){/*The first row of the matrix is empty, then the determinant is zero*/
+                return 0;
+            }
+            while(curNode.getRow() == 0){
+                detMatrix = detMatrix.minor(curNode.getRow(), curNode.getCol());
+                MatrixNode curNode = detMatrix.head;
+                determinant += ((Math.pow(-1, curNode.getRow() + curNode.getCol())) + curNode.getEntryValue() + detMatrix.determinant());
+                curNode = curNode.next();
+            }
         }
-        return 0;
+        return determinant;
     }
     public SparseInterface minor(int row, int col) {
         SparseInterface minor = new SparseMatrix();
